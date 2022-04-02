@@ -1,0 +1,17 @@
+---
+title: "Getting Started"
+output:
+  html_document
+---
+
+This short course will use tools in R and RStudio, as well as some additional packages. 
+
+It is recommended that participants install the most recent versions of [R](https://cran.r-project.org) and [RStudio](https://www.rstudio.com/products/rstudio/download/) before the short course begins. 
+
+Next, open RStudio and install several packages (and their dependencies) using the code below:
+
+```{r eval = FALSE}
+install.packages(
+  c("tidyverse", "knitr", "rmarkdown", "janitor", "broom", "here", "readxl", 
+    "haven", "rnoaa", "viridis"))
+```
