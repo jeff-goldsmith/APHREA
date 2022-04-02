@@ -7,12 +7,12 @@ navbar:
       href: index.html
     - text: "Short Course"
       menu:
-        - text: "Getting started"
-          href: shortcourse_getting_started.html
+        - text: "Prerequisites"
+          href: shortcourse_prereqs.html
         - text: "PHDS"
           href: shortcourse_phds.html
-        - text: "Starting Projects"
-          href: shortcourse_projects.html
+        - text: "Getting started"
+          href: shortcourse_getting_started.html
         - text: "Data Manipulation"
           href: shortcourse_data_manipulation.html
         - text: "Visualization"

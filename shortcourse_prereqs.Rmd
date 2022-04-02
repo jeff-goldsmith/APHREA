@@ -1,10 +1,12 @@
 ---
-title: "Getting Started"
+title: "Prerequisites"
 output:
   html_document
 ---
 
 This short course will use tools in R and RStudio, as well as some additional packages. 
+
+Although there are no formal prerequisites for this short course, coming prepared with a laptop that has relevant software will facilitate a smooth experience.
 
 It is recommended that participants install the most recent versions of [R](https://cran.r-project.org) and [RStudio](https://www.rstudio.com/products/rstudio/download/) before the short course begins. 
 
