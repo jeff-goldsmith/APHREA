@@ -1,0 +1,7 @@
+---
+title: "About this website"
+---
+
+This is an [R Markdown website](http://rmarkdown.rstudio.com/rmarkdown_websites.html), created by [Jeff Goldsmith](http://jeffgoldsmith.com) and [Tiffany Sanchez](https://www.publichealth.columbia.edu/people/our-faculty/trs2111) for an APHREA-DST short course.
+
+
