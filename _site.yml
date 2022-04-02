@@ -1,0 +1,27 @@
+name: "APHREA-DST"
+output_dir: "."
+navbar:
+  title: "APHREA-DST"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Short Course"
+      menu:
+        - text: "Getting started"
+          href: shortcourse_getting_started.html
+        - text: "PHDS"
+          href: shortcourse_phds.html
+        - text: "Starting Projects"
+          href: shortcourse_projects.html
+        - text: "Data Manipulation"
+          href: shortcourse_data_manipulation.html
+        - text: "Visualization"
+          href: shortcourse_visualization.html
+  right:
+    - text: "About"
+      href: about.html
+    - icon: fa-github fa-lg
+      href: http://github.com/jeff-goldsmith/APHREA
+output:
+  html_document:
+    theme: flatly
