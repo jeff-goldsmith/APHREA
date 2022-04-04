@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data Manipulation</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">APHREA-DST</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Short Course
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="shortcourse_prereqs.html">Prerequisites</a>
+    </li>
+    <li>
+      <a href="shortcourse_phds.html">PHDS</a>
+    </li>
+    <li>
+      <a href="shortcourse_getting_started.html">Getting started</a>
+    </li>
+    <li>
+      <a href="shortcourse_data_manipulation.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="shortcourse_visualization.html">Visualization</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="http://github.com/jeff-goldsmith/APHREA">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data Manipulation</h1>
+
+</div>
+
+
+<p>This module of the short course will focus on data import and data manipulation – as well as the use of pipes to chain sequences of operations. Throughout, we’ll emphasize the use of tidy dataframes for working with data.</p>
+<pre class="r"><code>knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = &quot;##&quot;,
+  fig.width = 8, 
+  fig.height = 5.5,
+  out.width = &quot;90%&quot;
+)
+
+library(tidyverse)
+library(viridis)
+
+theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+
+options(
+  ggplot2.continuous.colour = &quot;viridis&quot;,
+  ggplot2.continuous.fill = &quot;viridis&quot;,
+  tibble.print_min = 3
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d</code></pre>
+<div id="slides" class="section level2">
+<h2>Slides</h2>
+<div style="margin-bottom:5px">
+<strong> <a href="https://speakerdeck.com/jeffgoldsmith/p8105-visualization-i" title="Visualization" target="_blank">Visualization</a> </strong> from <strong><a href="https://speakerdeck.com/jeffgoldsmith" target="_blank">Jeff Goldsmith</a></strong>.
+</div>
+<p><br></p>
+</div>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>We’re going to learn how to import <a href="./resources/FAS_litters.csv">this dataset</a> – and, by extension, many other datasets!</p>
+<div id="paths" class="section level3">
+<h3>Paths</h3>
+<p>As a very quick overview, there are two kinds of paths:</p>
+<ul>
+<li>Absolute: a file or folder’s “full address” on your computer</li>
+<li>Relative: directions to a file or folder from your current working directory</li>
+</ul>
+<p>Absolute paths are often conceptually easier, because you don’t really have to <em>think</em> about them – you’re just giving the complete address, starting from the root directory. These work from any current working directory on the machine. However, absolute paths make your code extremely fragile: if you move your directory, or share your project with someone else, the <strong>absolute</strong> path to files will change and your code won’t work.</p>
+<p>An absolute path example is below:</p>
+<pre><code>&quot;/Users/jeffgoldsmith/Dropbox/Work/Talks/2022/202204_APHREA/short_course/APHREA/data/FAS_litters.csv&quot;</code></pre>
+<p>Relative paths, meanwhile, navigate from your current working directory. Relative paths are portable, in that if you move your directory or share it with someone else, the <strong>relative</strong> path to files in the directory will stay the same and your code will work. For both of these reasons, relative paths are preferred in almost every setting.</p>
+<p>(Note: if you ever use <code>setwd()</code>, you’re using absolute paths and <a href="https://twitter.com/hadleywickham/status/940021008764846080">taking big risks</a>…)</p>
+<p>The code below finds my current working directory:</p>
+<pre class="r"><code>getwd()
+## [1] &quot;/Users/jeffgoldsmith/Dropbox/Work/Talks/2022/202204_APHREA/short_course/APHREA&quot;</code></pre>
+<p>A relative path to the same file as the absolute path above is</p>
+<pre><code>&quot;./data/FAS_litters.csv&quot;</code></pre>
+<p>One note: R Markdown files treat whatever directory they’re in as the starting point for relative paths. For now, putting your R Markdown file in the same directory as you .RProj file will save a lot of headaches – the same path will work when you knit the document and when you write / edit code interactive in the console. For larger projects, you might want to have a separate directory with several R Markdown files. In that case using <a href="https://github.com/jennybc/here_here"><code>here::here</code></a> to identify and navigate from the <em>project</em> top-level directory is great, but you need a pretty firm understanding of paths before jumping into that.</p>
+</div>
+<div id="importing-data-tables" class="section level3">
+<h3>Importing data tables</h3>
+<p>Now that we have paths handled, we can start loading data. We’re going to start with rectangular data tables (data in rows and columns, with data separated by a delimiter) saved in a plain text format. Of these, csv (comma separated value) files are most common, and others are handled in basically the same way. To import a csv, we’ll use a function from <code>readr</code> (included in the tidyverse):</p>
+<pre class="r"><code>litters_data = read_csv(file = &quot;./data/FAS_litters.csv&quot;)
+## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Great – we’ve imported data! The first argument to <code>read_csv</code> is the path to the data, and the line above assigns the result of <code>read_csv</code> to <code>litters_data</code>. This function call also prints information about the column parsing. We’ll talk more about both of these shortly.</p>
+<p>I (almost always) use <code>janitor::clean_names()</code> to clean up variable names after importing data. Doing so will take whatever the column names are and convert them to lower snake case.</p>
+<pre class="r"><code>names(litters_data)
+## [1] &quot;Group&quot;             &quot;Litter Number&quot;     &quot;GD0 weight&quot;       
+## [4] &quot;GD18 weight&quot;       &quot;GD of Birth&quot;       &quot;Pups born alive&quot;  
+## [7] &quot;Pups dead @ birth&quot; &quot;Pups survive&quot;
+litters_data = janitor::clean_names(litters_data)
+names(litters_data)
+## [1] &quot;group&quot;           &quot;litter_number&quot;   &quot;gd0_weight&quot;      &quot;gd18_weight&quot;    
+## [5] &quot;gd_of_birth&quot;     &quot;pups_born_alive&quot; &quot;pups_dead_birth&quot; &quot;pups_survive&quot;</code></pre>
+</div>
+<div id="looking-at-data" class="section level3">
+<h3>Looking at data</h3>
+<p>The first thing to do after importing the data (unless <code>read_csv</code> gives warnings) is to look at it. If there are unexpected results during data import, you’ll catch a lot of them here. In addition to printing the data (which is my first step), I often use <code>View</code> / <code>view</code>:</p>
+<pre class="r"><code>view(litters_data)</code></pre>
+</div>
+<div id="other-data-import-notes" class="section level3">
+<h3>Other data import notes</h3>
+<p>A few quick points:</p>
+<ul>
+<li>There are a lot of options to <code>read_csv()</code>, and these can be useful in controlling your data import results.</li>
+<li>For other file formats, I use the <code>readxl</code> and <code>haven</code> packages!</li>
+<li>You may be used to <code>read.csv()</code> instead of <code>read_csv()</code>. There are a lot of good reasons to prefer <code>read_csv()</code>, although they aren’t always readily apparent.</li>
+<li>You will sometimes need to export data after you have imported and cleaned it. The <code>write_csv()</code> function addresses this problem.</li>
+</ul>
+</div>
+</div>
+<div id="data-manipulation" class="section level2">
+<h2>Data manipulation</h2>
+<p>Once you’ve imported data, you’re going to need to do some cleaning up.</p>
+<div id="select" class="section level3">
+<h3><code>select</code></h3>
+<p>For a given analysis, you may only need a subset of the columns in a data table; extracting only what you need can helpfully de-clutter, especially when you have large datasets. Select columns using <code>select</code>.</p>
+<p>You can specify the columns you want to keep by naming all of them:</p>
+<pre class="r"><code>select(litters_data, group, litter_number, gd0_weight, pups_born_alive)
+## # A tibble: 49 × 4
+##   group litter_number gd0_weight pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;           &lt;dbl&gt;
+## 1 Con7  #85                 19.7               3
+## 2 Con7  #1/2/95/2           27                 8
+## 3 Con7  #5/5/3/83/3-3       26                 6
+## # … with 46 more rows</code></pre>
+<p>You can specify the specify a range of columns to keep:</p>
+<pre class="r"><code>select(litters_data, group:gd_of_birth)
+## # A tibble: 49 × 5
+##   group litter_number gd0_weight gd18_weight gd_of_birth
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Con7  #85                 19.7        34.7          20
+## 2 Con7  #1/2/95/2           27          42            19
+## 3 Con7  #5/5/3/83/3-3       26          41.4          19
+## # … with 46 more rows</code></pre>
+<p>You can also specify columns you’d like to remove:</p>
+<pre class="r"><code>select(litters_data, -pups_survive)
+## # A tibble: 49 × 7
+##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 Con7  #85                 19.7        34.7          20               3
+## 2 Con7  #1/2/95/2           27          42            19               8
+## 3 Con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 46 more rows, and 1 more variable: pups_dead_birth &lt;dbl&gt;</code></pre>
+<p>You can rename variables as part of this process:</p>
+<pre class="r"><code>select(litters_data, GROUP = group, LiTtEr_NuMbEr = litter_number)
+## # A tibble: 49 × 2
+##   GROUP LiTtEr_NuMbEr
+##   &lt;chr&gt; &lt;chr&gt;        
+## 1 Con7  #85          
+## 2 Con7  #1/2/95/2    
+## 3 Con7  #5/5/3/83/3-3
+## # … with 46 more rows</code></pre>
+<p>If all you want to do is rename something, you can use <code>rename</code> instead of <code>select</code>. This will rename the variables you care about, and keep everything else:</p>
+<pre class="r"><code>rename(litters_data, GROUP = group, LiTtEr_NuMbEr = litter_number)
+## # A tibble: 49 × 8
+##   GROUP LiTtEr_NuMbEr gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 Con7  #85                 19.7        34.7          20               3
+## 2 Con7  #1/2/95/2           27          42            19               8
+## 3 Con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 46 more rows, and 2 more variables: pups_dead_birth &lt;dbl&gt;,
+## #   pups_survive &lt;dbl&gt;</code></pre>
+<p>There are some handy helper functions for <code>select</code>; read about all of them using <code>?select_helpers</code>. I use <code>starts_with()</code>, <code>ends_with()</code>, and <code>contains()</code> often, especially when there variables are named with suffixes or other standard patterns:</p>
+<pre class="r"><code>select(litters_data, starts_with(&quot;gd&quot;))
+## # A tibble: 49 × 3
+##   gd0_weight gd18_weight gd_of_birth
+##        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1       19.7        34.7          20
+## 2       27          42            19
+## 3       26          41.4          19
+## # … with 46 more rows</code></pre>
+<p>I also frequently use is <code>everything()</code>, which is handy for reorganizing columns without discarding anything:</p>
+<pre class="r"><code>select(litters_data, litter_number, pups_survive, everything())
+## # A tibble: 49 × 8
+##   litter_number pups_survive group gd0_weight gd18_weight gd_of_birth
+##   &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 #85                      3 Con7        19.7        34.7          20
+## 2 #1/2/95/2                7 Con7        27          42            19
+## 3 #5/5/3/83/3-3            5 Con7        26          41.4          19
+## # … with 46 more rows, and 2 more variables: pups_born_alive &lt;dbl&gt;,
+## #   pups_dead_birth &lt;dbl&gt;</code></pre>
+<p><code>relocate</code> does a similar thing (and is sort of like <code>rename</code> in that it’s handy but not critical):</p>
+<pre class="r"><code>relocate(litters_data, litter_number, pups_survive)
+## # A tibble: 49 × 8
+##   litter_number pups_survive group gd0_weight gd18_weight gd_of_birth
+##   &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 #85                      3 Con7        19.7        34.7          20
+## 2 #1/2/95/2                7 Con7        27          42            19
+## 3 #5/5/3/83/3-3            5 Con7        26          41.4          19
+## # … with 46 more rows, and 2 more variables: pups_born_alive &lt;dbl&gt;,
+## #   pups_dead_birth &lt;dbl&gt;</code></pre>
+<p>In larger datasets,</p>
+<p>Lastly, like other functions in <code>dplyr</code>, <code>select</code> will export a dataframe even if you only select one column. Mostly this is fine, but sometimes you want the vector stored in the column. To pull a single variable, use <code>pull</code>.</p>
+</div>
+<div id="filter" class="section level3">
+<h3><code>filter</code></h3>
+<p>Some data tables will include rows you don’t need for your current analysis. Although you could remove specific row numbers using base R, you shouldn’t – this might break if the raw data are updated, and the thought process isn’t transparent. Instead, you should filter rows based on logical expressions using the <code>filter</code> function. Like <code>select</code>, the first argument to <code>filter</code> is the dataframe you’re filtering; all subsequent arguments are logical expressions.</p>
+<p>You will often filter using comparison operators (<code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, and <code>!=</code>). You may also use <code>%in%</code> to detect if values appear in a set, and <code>is.na()</code> to find missing values. The results of comparisons are logical – the statement is <code>TRUE</code> or <code>FALSE</code> depending on the values you compare – and can be combined with other comparisons using the logical operators <code>&amp;</code> and <code>|</code>, or negated using <code>!</code>.</p>
+<p>Some ways you might filter the litters data are:</p>
+<ul>
+<li><code>gd_of_birth == 20</code></li>
+<li><code>pups_born_alive &gt;= 2</code></li>
+<li><code>pups_survive != 4</code></li>
+<li><code>!(pups_survive == 4)</code></li>
+<li><code>group %in% c("Con7", "Con8")</code></li>
+<li><code>group == "Con7" &amp; gd_of_birth == 20</code></li>
+</ul>
+<p>A very common filtering step requires you to omit missing observations. You <em>can</em> do this with <code>filter</code>, but I recommend using <code>drop_na</code> from the <code>tidyr</code> package:</p>
+<ul>
+<li><code>drop_na(litters_data)</code> will remove any row with a missing value</li>
+<li><code>drop_na(litters_data, wt_increase)</code> will remove rows for which <code>wt_increase</code> is missing.</li>
+</ul>
+<p>Filtering can be helpful for limiting a dataset to only those observations needed for an analysis. However, I recommend against the creation of many data subsets (e.g. one for each group). This can clutter up your workspace, and we’ll see good tools for the analysis of subsets before long.</p>
+</div>
+<div id="mutate" class="section level3">
+<h3><code>mutate</code></h3>
+<p>Sometimes you need to select columns; sometimes you need to change them or create new ones. You can do this using <code>mutate</code>.</p>
+<p>The example below creates a new variable measuring the difference between <code>gd18_weight</code> and <code>gd0_weight</code> and modifies the existing <code>group</code> variable.</p>
+<pre class="r"><code>mutate(litters_data,
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+)
+## # A tibble: 49 × 9
+##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 con7  #85                 19.7        34.7          20               3
+## 2 con7  #1/2/95/2           27          42            19               8
+## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 46 more rows, and 3 more variables: pups_dead_birth &lt;dbl&gt;,
+## #   pups_survive &lt;dbl&gt;, wt_gain &lt;dbl&gt;</code></pre>
+<p>A few things in this example are worth noting:</p>
+<ul>
+<li>Your new variables can be functions of old variables</li>
+<li>New variables appear at the end of the dataset in the order that they are created</li>
+<li>You can overwrite old variables</li>
+<li>You can create a new variable and immediately refer to (or change) it</li>
+</ul>
+<p>Creating a new variable that does exactly what you need can be a challenge; the more functions you know about, the easier this gets.</p>
+</div>
+<div id="arrange" class="section level3">
+<h3><code>arrange</code></h3>
+<p>In comparison to the preceding, arranging is pretty straightforward. You can arrange the rows in your data according to the values in one or more columns:</p>
+<pre class="r"><code>head(arrange(litters_data, group, pups_born_alive), 10)
+## # A tibble: 10 × 8
+##    group litter_number   gd0_weight gd18_weight gd_of_birth pups_born_alive
+##    &lt;chr&gt; &lt;chr&gt;                &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+##  1 Con7  #85                   19.7        34.7          20               3
+##  2 Con7  #5/4/2/95/2           28.5        44.1          19               5
+##  3 Con7  #5/5/3/83/3-3         26          41.4          19               6
+##  4 Con7  #4/2/95/3-3           NA          NA            20               6
+##  5 Con7  #2/2/95/3-2           NA          NA            20               6
+##  6 Con7  #1/2/95/2             27          42            19               8
+##  7 Con7  #1/5/3/83/3-3/2       NA          NA            20               9
+##  8 Con8  #2/2/95/2             NA          NA            19               5
+##  9 Con8  #1/6/2/2/95-2         NA          NA            20               7
+## 10 Con8  #3/6/2/2/95-3         NA          NA            20               7
+## # … with 2 more variables: pups_dead_birth &lt;dbl&gt;, pups_survive &lt;dbl&gt;</code></pre>
+</div>
+<div id="section" class="section level3">
+<h3><code>%&gt;%</code></h3>
+<p>We’ve seen several commands you will use regularly for data manipulation and cleaning. You will rarely use them in isolation. For example, suppose you want to load the data, clean the column names, remove <code>pups_survive</code>, and create <code>wt_gain</code>. There are a couple of options for this kind of multi-step data manipulation:</p>
+<ul>
+<li>define intermediate datasets (or overwrite data at each stage)</li>
+<li>nest function calls</li>
+</ul>
+<p>The following is an example of the first option:</p>
+<pre class="r"><code>litters_data_raw = read_csv(&quot;./data/FAS_litters.csv&quot;)
+## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+litters_data_clean_names = janitor::clean_names(litters_data_raw)
+litters_data_selected_cols = select(litters_data_clean_names, -pups_survive)
+litters_data_with_vars = 
+  mutate(
+    litters_data_selected_cols, 
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group))
+litters_data_with_vars_without_missing = 
+  drop_na(litters_data_with_vars, wt_gain)
+litters_data_with_vars_without_missing
+## # A tibble: 31 × 8
+##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 con7  #85                 19.7        34.7          20               3
+## 2 con7  #1/2/95/2           27          42            19               8
+## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 28 more rows, and 2 more variables: pups_dead_birth &lt;dbl&gt;,
+## #   wt_gain &lt;dbl&gt;</code></pre>
+<p>Below, we try the second option:</p>
+<pre class="r"><code>litters_data_clean = 
+  drop_na(
+    mutate(
+      select(
+        janitor::clean_names(
+          read_csv(&quot;./data/FAS_litters.csv&quot;)
+          ), 
+      -pups_survive
+      ),
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)
+    ),
+  wt_gain
+  )
+## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+litters_data_clean
+## # A tibble: 31 × 8
+##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 con7  #85                 19.7        34.7          20               3
+## 2 con7  #1/2/95/2           27          42            19               8
+## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 28 more rows, and 2 more variables: pups_dead_birth &lt;dbl&gt;,
+## #   wt_gain &lt;dbl&gt;</code></pre>
+<p>These are both confusing and bad: the first gets confusing and clutters our workspace, and the second has to be read inside out.</p>
+<p>Piping solves this problem. It allows you to turn the nested approach into a sequential chain by passing the result of one function call as an argument to the next function call:</p>
+<pre class="r"><code>litters_data = 
+  read_csv(&quot;./data/FAS_litters.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(-pups_survive) %&gt;%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %&gt;% 
+  drop_na(wt_gain)
+## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+litters_data
+## # A tibble: 31 × 8
+##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+##   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+## 1 con7  #85                 19.7        34.7          20               3
+## 2 con7  #1/2/95/2           27          42            19               8
+## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+## # … with 28 more rows, and 2 more variables: pups_dead_birth &lt;dbl&gt;,
+## #   wt_gain &lt;dbl&gt;</code></pre>
+<p>All three approaches result in the same dataset, but the piped commands are by far the most straightforward. The easiest way to read <code>%&gt;%</code> is “then”; the keyboard shortcuts are Ctrl + Shift + M (Windows) and Cmd + Shift + M (Mac).</p>
+<p>The functions in <code>dplyr</code> (and much of the <code>tidyverse</code>) are designed to work smoothly with the pipe operator. By default, the pipe will take the result of one function call and use that as the first argument of the next function call; by design, functions in <code>dplyr</code> will take a tibble as an input and return a tibble as a result. As a consequence, functions in <code>dplyr</code> are easy to connect in a data cleaning chain. You can make this more explicit by using <code>.</code> as a placeholder for the result of the preceding call:</p>
+<pre class="r"><code>litters_data = 
+  read_csv(&quot;./data/FAS_litters.csv&quot;) %&gt;%
+  janitor::clean_names(dat = .) %&gt;%
+  select(.data = ., -pups_survive) %&gt;%
+  mutate(.data = .,
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %&gt;% 
+  drop_na(data = ., wt_gain)
+## Rows: 49 Columns: 8
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): Group, Litter Number
+## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>In this example, the dataset argument is called <code>dat</code> in <code>janitor::clean_names</code>, <code>.data</code> in the <code>dplyr</code> functions, and <code>data</code> in <code>drop_na</code> – which is definitely confusing. In the majority of cases (and everywhere in the tidyverse) you’ll elide the first argument and be happy with life, but there are some cases where the placeholder is necessary. For example, to regress <code>wt_gain</code> on <code>pups_born_alive</code>, you might use:</p>
+<pre class="r"><code>litters_data %&gt;%
+  lm(wt_gain ~ pups_born_alive, data = .) %&gt;%
+  broom::tidy()
+## # A tibble: 2 × 5
+##   term            estimate std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)       13.1       1.27      10.3  3.39e-11
+## 2 pups_born_alive    0.605     0.173      3.49 1.55e- 3</code></pre>
+<p>There are limitations to the pipe. You shouldn’t have sequences that are too long; there isn’t a great way to deal with multiple inputs and outputs; and (since it’s not base R) not everyone will know what <code>%&gt;%</code> means or does. That said, compared to days when R users only had the first two options, life is much better!</p>
+</div>
+</div>
+<div id="other-materials" class="section level2">
+<h2>Other materials</h2>
+<p>The content in this page draws heavily from several sources; each of the things below goes into more detail in one way or another.</p>
+<ul>
+<li>You can learn more about tibbles from <a href="http://r4ds.had.co.nz/tibbles.html">R for Data Science</a> or the tidyverse <a href="http://tibble.tidyverse.org/index.html">page</a></li>
+<li>R for Data Science has a chapter on <a href="http://r4ds.had.co.nz/data-import.html">data import</a></li>
+<li>RStudio has recordings of webinars on <a href="https://www.rstudio.com/resources/webinars/getting-your-data-into-r/">Getting data into R</a> and <a href="https://www.rstudio.com/resources/webinars/whats-new-with-readxl/">What’s new with readxl</a></li>
+</ul>
+<p>There’s lots of stuff out there on how to clean your data using <code>dplyr</code>.</p>
+<ul>
+<li>R for Data Science has a chapter on <a href="http://r4ds.had.co.nz/transform.html">data transformation</a>. The chapter on <a href="http://r4ds.had.co.nz/pipes.html">pipes</a> may also be useful at this point.</li>
+<li>R Programming for Research also discusses <a href="https://geanders.github.io/RProgrammingForResearch/entering-and-cleaning-data-1.html#data-cleaning">data cleaning</a>.</li>
+<li>Even R Programming for Data Science, which tends towards base R, has a chapter on <a href="https://bookdown.org/rdpeng/rprogdatascience/managing-data-frames-with-the-dplyr-package.html"><code>dplyr</code></a>.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
