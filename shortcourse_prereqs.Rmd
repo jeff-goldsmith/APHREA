@@ -15,5 +15,5 @@ Next, open RStudio and install several packages (and their dependencies) using t
 ```{r eval = FALSE}
 install.packages(
   c("tidyverse", "knitr", "rmarkdown", "janitor", "broom", "here", "readxl", 
-    "haven", "rnoaa", "viridis"))
+    "haven", "rnoaa", "viridis", "ggridges"))
 ```
