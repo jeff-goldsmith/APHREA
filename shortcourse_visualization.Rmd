@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 
 library(tidyverse)
-theme_set(theme_gray())
 ```
 
 ## Slides
@@ -29,6 +28,24 @@ Slides can be downloaded [here](./slides/ShortCourse_Visualization.pdf).
 
 
 ## Example
+
+In the following, we'll use some changes to the default colors in `ggplot`. Include this code chunk at the top of your R Markdown file to get the same colors:
+
+```{r}
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+This step isn't necessary but it does make the plots a bit nicer! More information about these changes (to the color palette and default theme) can be found in [this lecture](https://www.p8105.com/visualization_pt2.html) from P8105. 
+
+
 
 First, I'll create an R Markdown file for this module of the short course, and load the `tidyverse` package in "setup" code chunk. 
 
