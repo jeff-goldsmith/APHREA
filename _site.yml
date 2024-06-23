@@ -5,6 +5,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+    - text: "Data"
+      href: data.html
     - text: "Short Course"
       menu:
         - text: "Prerequisites"
@@ -17,6 +19,10 @@ navbar:
           href: shortcourse_data_manipulation.html
         - text: "Visualization"
           href: shortcourse_visualization.html
+        - text: "Flexdashboard"
+          href: shortcourse_dashboards.html
+        - text: "Shiny"
+          href: shortcourse_shiny.html
   right:
     - text: "About"
       href: about.html

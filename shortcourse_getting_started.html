@@ -13,7 +13,7 @@
 
 <title>Getting Started</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -29,14 +29,14 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -57,6 +57,7 @@ if (window.hljs) {
   }
 }
 </script>
+
 
 
 
@@ -86,6 +87,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -143,11 +147,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -176,8 +184,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -185,16 +193,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -311,7 +312,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -323,8 +324,11 @@ div.tocify {
         <li>
   <a href="index.html">Home</a>
 </li>
+<li>
+  <a href="data.html">Data</a>
+</li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Short Course
      
     <span class="caret"></span>
@@ -344,6 +348,12 @@ div.tocify {
     </li>
     <li>
       <a href="shortcourse_visualization.html">Visualization</a>
+    </li>
+    <li>
+      <a href="shortcourse_dashboards.html">Flexdashboard</a>
+    </li>
+    <li>
+      <a href="shortcourse_shiny.html">Shiny</a>
     </li>
   </ul>
 </li>
@@ -372,22 +382,47 @@ div.tocify {
 </div>
 
 
-<p>This page describes how to summarize your work in writing using R Markdown, notes the importance of data frames, and provides some best practices for organizing projects.</p>
+<p>This page describes how to summarize your work in writing using R
+Markdown, notes the importance of data frames, and provides some best
+practices for organizing projects.</p>
 <div id="slides" class="section level2">
 <h2>Slides</h2>
 <script async class="speakerdeck-embed" data-id="1c9188d4ed594d93b91b7a6fd5e0fb2d" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 <div style="margin-bottom:5px">
-<strong> <a href="https://speakerdeck.com/jeffgoldsmith/aphrea-getting-started" title="APHREA: Getting Started" target="_blank">APHREA: Getting Started</a> </strong> from <strong><a href="https://speakerdeck.com/jeffgoldsmith" target="_blank">Jeff Goldsmith</a></strong>.
+<strong>
+<a href="https://speakerdeck.com/jeffgoldsmith/aphrea-getting-started" title="APHREA: Getting Started" target="_blank">APHREA:
+Getting Started</a> </strong> from
+<strong><a href="https://speakerdeck.com/jeffgoldsmith" target="_blank">Jeff
+Goldsmith</a></strong>.
 </div>
-<p>Slides can be downloaded <a href="./slides/ShortCourse_Getting_Started.pdf">here</a>.</p>
+<p>Slides can be downloaded <a
+href="./slides/ShortCourse_Getting_Started.pdf">here</a>.</p>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<p>Before jumping in, one short note about the default RStudio treatment of R Markdown documents: it behaves like a “notebook” and shows output mixed in with the code, rather than in the console or viewer. I don’t like this, and I’m definitely not the only one. I might just be old and set in my ways, but there are <a href="https://docs.google.com/presentation/d/1n2RlMdmv1p25Xy5thJUhkKGvjtV-dkAIsUXP-AL4ffI/preview?slide=id.g362da58057_0_1">good reasons</a> to <a href="https://twitter.com/hspter/status/1034511875499732993">avoid notebooks</a>. These can be turned off using Preferences &gt; R Markdown &gt; Show output inline.</p>
-<p>R will, by default, save everything in your workspace. I strongly suggest you turn this behavior off (Preferences &gt; General &gt; Save Workspace: Never). First, doing so will remove a crutch early on and help you focus on your scripts. Second, saving your workspace automatically and doing so in the background can get you in trouble if (or when) you deal with patient data.</p>
+<p>Before jumping in, one short note about the default RStudio treatment
+of R Markdown documents: it behaves like a “notebook” and shows output
+mixed in with the code, rather than in the console or viewer. I don’t
+like this, and I’m definitely not the only one. I might just be old and
+set in my ways, but there are <a
+href="https://docs.google.com/presentation/d/1n2RlMdmv1p25Xy5thJUhkKGvjtV-dkAIsUXP-AL4ffI/preview?slide=id.g362da58057_0_1">good
+reasons</a> to <a
+href="https://twitter.com/hspter/status/1034511875499732993">avoid
+notebooks</a>. These can be turned off using Preferences &gt; R Markdown
+&gt; Show output inline.</p>
+<p>R will, by default, save everything in your workspace. I strongly
+suggest you turn this behavior off (Preferences &gt; General &gt; Save
+Workspace: Never). First, doing so will remove a crutch early on and
+help you focus on your scripts. Second, saving your workspace
+automatically and doing so in the background can get you in trouble if
+(or when) you deal with patient data.</p>
 <div id="basic-rmd" class="section level3">
 <h3>Basic RMD</h3>
-<p>Below is a first RMD file. To follow along, create a .Rmd file using File &gt; New File &gt; R Markdown, and replace the default text with what’s below; you can also download the template <a href="resources/template.Rmd">here</a>. Keep this in a directory you can find again later!</p>
+<p>Below is a first RMD file. To follow along, create a .Rmd file using
+File &gt; New File &gt; R Markdown, and replace the default text with
+what’s below; you can also download the template <a
+href="resources/template.Rmd">here</a>. Keep this in a directory you can
+find again later!</p>
 <pre><code>---
 title: &quot;Simple document&quot;
 output: html_document
@@ -427,34 +462,80 @@ ggplot(plot_df, aes(x = x)) + geom_histogram()
 ```</code></pre>
 <p>There are three major components to this file:</p>
 <ul>
-<li><strong>YAML header:</strong> The segment at the beginning of the document bracketed by <code>---</code>s.</li>
-<li><strong>Text + inline R:</strong> Written text with simple formatting like <code># heading</code>, <code>**bold**</code>, and <code>_italic_</code></li>
-<li><strong>Code chunks:</strong> Blocks of code surrounded by <code>```</code></li>
+<li><strong>YAML header:</strong> The segment at the beginning of the
+document bracketed by <code>---</code>s.</li>
+<li><strong>Text + inline R:</strong> Written text with simple
+formatting like <code># heading</code>, <code>**bold**</code>, and
+<code>_italic_</code></li>
+<li><strong>Code chunks:</strong> Blocks of code surrounded by
+<code>```</code></li>
 </ul>
-<p>The combination of these elements allows you a great deal of flexibility and power as an author.</p>
-<p>R Markdown documents are rendered to produce complete reports with text, formatting, and code results by “knitting”. You can knit your document using the RStudio GUI or CMD / Ctrl + Shift + K; these options execute <code>knitr::knit</code> (which you can run directly from the command line if you prefer). Behind the scenes, <code>knitr</code> is creating a Markdown document and pandoc is translating that to the output format you specify (e.g. HTML, .pdf, .docx).</p>
+<p>The combination of these elements allows you a great deal of
+flexibility and power as an author.</p>
+<p>R Markdown documents are rendered to produce complete reports with
+text, formatting, and code results by “knitting”. You can knit your
+document using the RStudio GUI or CMD / Ctrl + Shift + K; these options
+execute <code>knitr::knit</code> (which you can run directly from the
+command line if you prefer). Behind the scenes, <code>knitr</code> is
+creating a Markdown document and pandoc is translating that to the
+output format you specify (e.g. HTML, .pdf, .docx).</p>
 </div>
 <div id="code-chunks-and-snippets" class="section level3">
 <h3>Code chunks and snippets</h3>
-<p>We’ll start with code chunks, since these are the distinguishing feature of R Markdown documents. The code chunks take the place of scripts in that they hold the code you use to produce your results. However, they tend to be briefer and more self-contained: you’re nestling these bits of code among the text the supports them and the results they produce. You can still execute code in chunks using Cmd/Ctrl + Enter, and you will still develop code by writing and refining until you have something you’re happy with.</p>
-<p>Although the benefits will mostly become apparently later, I recommend you get in the habit of naming your code chunks now using <code>{r chunk_name}</code>. I also recommend inserting code chunks using hotkeys (Opt + Cmd + I for Mac, Ctrl + Alt + I for Windows).</p>
-<p>Beyond the name, you can customize the behavior of your code chunk via options defined in the chunk header. Some common options are:</p>
+<p>We’ll start with code chunks, since these are the distinguishing
+feature of R Markdown documents. The code chunks take the place of
+scripts in that they hold the code you use to produce your results.
+However, they tend to be briefer and more self-contained: you’re
+nestling these bits of code among the text the supports them and the
+results they produce. You can still execute code in chunks using
+Cmd/Ctrl + Enter, and you will still develop code by writing and
+refining until you have something you’re happy with.</p>
+<p>Although the benefits will mostly become apparently later, I
+recommend you get in the habit of naming your code chunks now using
+<code>{r chunk_name}</code>. I also recommend inserting code chunks
+using hotkeys (Opt + Cmd + I for Mac, Ctrl + Alt + I for Windows).</p>
+<p>Beyond the name, you can customize the behavior of your code chunk
+via options defined in the chunk header. Some common options are:</p>
 <ul>
-<li><code>eval = FALSE</code>: code will be displayed but not executed; results are not included.</li>
-<li><code>echo = FALSE</code>: code will be executed but not displayed; results are included.</li>
-<li><code>include = FALSE</code>: code won’t be executed or displayed.</li>
-<li><code>message = FALSE</code> and <code>warning = FALSE</code>: prevents messages and warnings from being displayed.</li>
-<li><code>results = hide</code> and <code>fig.show = hide</code>: prevents results and figures from being shown, respectively.</li>
-<li><code>collapse = TRUE</code>: output will be collapsed into a single block at shown at the end of the chunk.</li>
-<li><code>error</code>: errors in code will stop rendering when <code>FALSE</code>; errors in code will be printed in the doc when <code>TRUE</code>. The default is <code>FALSE</code> and you should almost never change it.</li>
+<li><code>eval = FALSE</code>: code will be displayed but not executed;
+results are not included.</li>
+<li><code>echo = FALSE</code>: code will be executed but not displayed;
+results are included.</li>
+<li><code>include = FALSE</code>: code won’t be executed or
+displayed.</li>
+<li><code>message = FALSE</code> and <code>warning = FALSE</code>:
+prevents messages and warnings from being displayed.</li>
+<li><code>results = hide</code> and <code>fig.show = hide</code>:
+prevents results and figures from being shown, respectively.</li>
+<li><code>collapse = TRUE</code>: output will be collapsed into a single
+block at shown at the end of the chunk.</li>
+<li><code>error</code>: errors in code will stop rendering when
+<code>FALSE</code>; errors in code will be printed in the doc when
+<code>TRUE</code>. The default is <code>FALSE</code> and you should
+almost never change it.</li>
 </ul>
-<p>Use these options to be judicious about what you include in your report. Remember to keep your audience in mind: how much do they want or need to see?</p>
-<p>You can also cache the results of a code chunk, but we will largely avoid this. Caching can save time by saving the results of a code chunk instead of re-executing when the document is knit. However, you have to be careful when using this option since downstream code can depend on upstream changes. Controlling this behavior through the <code>dependson</code> option can help, but if you cache code you’ll want to periodically clear you cache to ensure you’re getting reproducible results.</p>
-<p>Inserting brief code snippets inline is sometimes helpful; I use these to give the sample size or summary statistics in text. You can insert code inline using <code>`r `</code>, often in conjunction with the <code>format()</code> function to clean up your output.</p>
+<p>Use these options to be judicious about what you include in your
+report. Remember to keep your audience in mind: how much do they want or
+need to see?</p>
+<p>You can also cache the results of a code chunk, but we will largely
+avoid this. Caching can save time by saving the results of a code chunk
+instead of re-executing when the document is knit. However, you have to
+be careful when using this option since downstream code can depend on
+upstream changes. Controlling this behavior through the
+<code>dependson</code> option can help, but if you cache code you’ll
+want to periodically clear you cache to ensure you’re getting
+reproducible results.</p>
+<p>Inserting brief code snippets inline is sometimes helpful; I use
+these to give the sample size or summary statistics in text. You can
+insert code inline using <code>`r `</code>, often in conjunction with
+the <code>format()</code> function to clean up your output.</p>
 </div>
 <div id="formatting-text" class="section level3">
 <h3>Formatting text</h3>
-<p>There are a huge number of ways to format your documents. The overview below is essentially copied from <a href="http://r4ds.had.co.nz/r-markdown.html">R for Data Science</a>; a link to a handy cheatsheet is below.</p>
+<p>There are a huge number of ways to format your documents. The
+overview below is essentially copied from <a
+href="http://r4ds.had.co.nz/r-markdown.html">R for Data Science</a>; a
+link to a handy cheatsheet is below.</p>
 <pre><code>Text formatting 
 ------------------------------------------------------------
 
@@ -497,66 +578,137 @@ First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
 Content Cell  | Content Cell</code></pre>
-<p>You’ll need to refer to this list (or to similar resources) pretty often at first, but most of it will become second-nature after you’ve written a few documents.</p>
+<p>You’ll need to refer to this list (or to similar resources) pretty
+often at first, but most of it will become second-nature after you’ve
+written a few documents.</p>
 </div>
 <div id="yaml-and-output-formats" class="section level3">
 <h3>YAML and output formats</h3>
-<p>The YAML header controls global features of the document. I generally will include both the <code>author</code> and <code>date</code> in each document I produce.</p>
+<p>The YAML header controls global features of the document. I generally
+will include both the <code>author</code> and <code>date</code> in each
+document I produce.</p>
 <pre class="yaml"><code>author: &quot;Jeff Goldsmith&quot;
 date: 2019-09-10</code></pre>
-<p>We’re mostly concerned with the output format, which is controlled through the <code>output:</code> field.</p>
-<p>The snippet below will produce an HTML document. Notice that this has subfields to add a table of contents, and float that table alongside the content. These lines are used throughout the course website.</p>
+<p>We’re mostly concerned with the output format, which is controlled
+through the <code>output:</code> field.</p>
+<p>The snippet below will produce an HTML document. Notice that this has
+subfields to add a table of contents, and float that table alongside the
+content. These lines are used throughout the course website.</p>
 <pre class="yaml"><code>output:
   html_document:
     toc: true
     toc_float: true</code></pre>
-<p>HTML documents are great because they allow interactivity in a way that static formats (PDF, Word) do not. For example, adding the subfield <code>code_folding: hide</code> under <code>html_document</code> will hide all the code in the document until the reader clicks to show it (I almost always use this for collaborative reports).</p>
-<p>That said, some collaborators will need or prefer static documents. You can create these using the YAML snippet below, which will produce a PDF or a Word document when knitted. These require extra software (LaTeX and Word, respectively).</p>
+<p>HTML documents are great because they allow interactivity in a way
+that static formats (PDF, Word) do not. For example, adding the subfield
+<code>code_folding: hide</code> under <code>html_document</code> will
+hide all the code in the document until the reader clicks to show it (I
+almost always use this for collaborative reports).</p>
+<p>That said, some collaborators will need or prefer static documents.
+You can create these using the YAML snippet below, which will produce a
+PDF or a Word document when knitted. These require extra software (LaTeX
+and Word, respectively).</p>
 <pre class="yaml"><code>output:
   pdf_document: default</code></pre>
 <pre class="yaml"><code>output:
   word_document: default</code></pre>
-<p>The formatting for both PDF and Word documents can be controlled through options as well, although these can be tricky to control (especially for Word documents). If you’re really interested in generating reports using Word, you probably will want to read up on the <a href="https://noamross.github.io/redoc/index.html"><code>redoc</code></a> package!</p>
+<p>The formatting for both PDF and Word documents can be controlled
+through options as well, although these can be tricky to control
+(especially for Word documents). If you’re really interested in
+generating reports using Word, you probably will want to read up on the
+<a
+href="https://noamross.github.io/redoc/index.html"><code>redoc</code></a>
+package!</p>
 </div>
 <div id="organizing-projects" class="section level3">
 <h3>Organizing projects</h3>
-<p>Your projects will generally consist of several related files – input data, R Markdown documents, results. It’s important to keep these organized, so you can find everything you need quickly and easily. R Projects, through RStudio, give you an easy way to do this.</p>
-<p>Create an R Project using File &gt; New Project &gt; Existing Directory and specifying the directory that contains your R Markdown document.</p>
-<p>For now, the best part about R Projects is that they force you to think about and organize the elements you need for your analysis or project. Double-clicking the new <code>.Rproj</code> file will launch the R Project; you’ll see a Files tab in the usual Plots / Packages / Help / Viewer pane. R Projects useful in other ways that become more apparent over time.</p>
+<p>Your projects will generally consist of several related files – input
+data, R Markdown documents, results. It’s important to keep these
+organized, so you can find everything you need quickly and easily. R
+Projects, through RStudio, give you an easy way to do this.</p>
+<p>Create an R Project using File &gt; New Project &gt; Existing
+Directory and specifying the directory that contains your R Markdown
+document.</p>
+<p>For now, the best part about R Projects is that they force you to
+think about and organize the elements you need for your analysis or
+project. Double-clicking the new <code>.Rproj</code> file will launch
+the R Project; you’ll see a Files tab in the usual Plots / Packages /
+Help / Viewer pane. R Projects useful in other ways that become more
+apparent over time.</p>
 </div>
 <div id="paths-and-your-working-directory" class="section level3">
 <h3>Paths and your working directory</h3>
-<p>To this point, we’ve been working entirely inside RStudio without a need to access anything on your computer. That’s allowed us to avoid a discussion of your Working Directory, but now we’ll address that too. As you’re working, R is sitting inside a single directory on your computer – it can find files in that directory or output files to that directory. Check your current working directory using:</p>
+<p>To this point, we’ve been working entirely inside RStudio without a
+need to access anything on your computer. That’s allowed us to avoid a
+discussion of your Working Directory, but now we’ll address that too. As
+you’re working, R is sitting inside a single directory on your computer
+– it can find files in that directory or output files to that directory.
+Check your current working directory using:</p>
 <pre class="r"><code>getwd()</code></pre>
-<p>If you’ve opened your R Project, that should be your working directory. That’s great! Another bit of encouragement to keep your stuff organized. This means that anything you output will be written to this directory:</p>
+<p>If you’ve opened your R Project, that should be your working
+directory. That’s great! Another bit of encouragement to keep your stuff
+organized. This means that anything you output will be written to this
+directory:</p>
 <pre class="r"><code>ggplot(plot_df, aes(x = x, y = y)) + geom_point()
 ggsave(&quot;scatter_plot.pdf&quot;, height = 4, width = 6)</code></pre>
-<p>With larger projects, it can be useful to create sub-directories for your project (e.g. <code>data</code> and <code>results</code>) – you don’t need to worry about that for now, but when you do this you should use relative paths to keep everything self-contained. That’s also a good time to start getting used to the <a href="https://github.com/jennybc/here_here"><code>here::here</code></a> approach to path construction.</p>
-<p>Note that we exported a figure using a command, rather than clicking the Export in the Plots tab. This is intentional – whatever your script produces, it should do so exclusively from the code you’ve written.</p>
+<p>With larger projects, it can be useful to create sub-directories for
+your project (e.g. <code>data</code> and <code>results</code>) – you
+don’t need to worry about that for now, but when you do this you should
+use relative paths to keep everything self-contained. That’s also a good
+time to start getting used to the <a
+href="https://github.com/jennybc/here_here"><code>here::here</code></a>
+approach to path construction.</p>
+<p>Note that we exported a figure using a command, rather than clicking
+the Export in the Plots tab. This is intentional – whatever your script
+produces, it should do so exclusively from the code you’ve written.</p>
 </div>
 <div id="workflow" class="section level3">
 <h3>Workflow</h3>
-<p>All this together suggests a workflow. For every new project (and I mean <em>every new project</em>), do the following:</p>
+<p>All this together suggests a workflow. For every new project (and I
+mean <em>every new project</em>), do the following:</p>
 <ul>
-<li>Create a directory with a reasonable name and path (e.g. <code>~/Documents/Work/APHREA/ShortCourse/</code>)</li>
+<li>Create a directory with a reasonable name and path
+(e.g. <code>~/Documents/Work/APHREA/ShortCourse/</code>)</li>
 <li>Put an R Project in the directory</li>
-<li>Keep everything related to the analysis – data inputs, scripts, reports, output – in there</li>
+<li>Keep everything related to the analysis – data inputs, scripts,
+reports, output – in there</li>
 <li>Periodically check for reproducibility of the analysis</li>
 </ul>
-<p>Starting this habit early will save you a <em>ton</em> of headaches along the road.</p>
+<p>Starting this habit early will save you a <em>ton</em> of headaches
+along the road.</p>
 </div>
 </div>
 <div id="other-materials" class="section level2">
 <h2>Other materials</h2>
-<p>Constructing useful documents that combine text and code is the subject of several online guides. See below for a sampling:</p>
+<p>Constructing useful documents that combine text and code is the
+subject of several online guides. See below for a sampling:</p>
 <ul>
-<li>The R Markdown <a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">cheatsheet</a> and this more <a href="https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf">recent version</a> are useful resources once you have the basics down</li>
-<li>R For Data Science devotes chapters to <a href="http://r4ds.had.co.nz/r-markdown.html">R Markdown</a>, <a href="http://r4ds.had.co.nz/r-markdown-formats.html">additional output formats</a>, and a useful <a href="http://r4ds.had.co.nz/r-markdown-workflow.html">workflow</a>.</li>
-<li>The <a href="http://rmarkdown.rstudio.com/articles_intro.html">Intro to R Markdown</a> from RStudio overlaps a lot with the previous bullet, but is also handy to review</li>
-<li>This <a href="https://ismayc.github.io/rbasics-book/4-rmarkdown.html">chapter</a> from <a href="https://ismayc.github.io/rbasics-book/">R Basics</a> is a good intro to R Markdown</li>
-<li>If Webinars are more to your liking, this <a href="https://www.rstudio.com/resources/webinars/getting-started-with-r-markdown/">intro</a> and this <a href="https://www.rstudio.com/resources/webinars/the-ecosystem-of-r-markdown/">follow-up</a> are good</li>
+<li>The R Markdown <a
+href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">cheatsheet</a>
+and this more <a
+href="https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf">recent
+version</a> are useful resources once you have the basics down</li>
+<li>R For Data Science devotes chapters to <a
+href="http://r4ds.had.co.nz/r-markdown.html">R Markdown</a>, <a
+href="http://r4ds.had.co.nz/r-markdown-formats.html">additional output
+formats</a>, and a useful <a
+href="http://r4ds.had.co.nz/r-markdown-workflow.html">workflow</a>.</li>
+<li>The <a href="http://rmarkdown.rstudio.com/articles_intro.html">Intro
+to R Markdown</a> from RStudio overlaps a lot with the previous bullet,
+but is also handy to review</li>
+<li>This <a
+href="https://ismayc.github.io/rbasics-book/4-rmarkdown.html">chapter</a>
+from <a href="https://ismayc.github.io/rbasics-book/">R Basics</a> is a
+good intro to R Markdown</li>
+<li>If Webinars are more to your liking, this <a
+href="https://www.rstudio.com/resources/webinars/getting-started-with-r-markdown/">intro</a>
+and this <a
+href="https://www.rstudio.com/resources/webinars/the-ecosystem-of-r-markdown/">follow-up</a>
+are good</li>
 </ul>
-<p>You’ll also find a lot of stuff online that has been written using R Markdown and, with a little digging, can often find the .RMD file as well. This is a great way to spot new tools and figure out how to incorporate them in your own documents!!</p>
+<p>You’ll also find a lot of stuff online that has been written using R
+Markdown and, with a little digging, can often find the .RMD file as
+well. This is a great way to spot new tools and figure out how to
+incorporate them in your own documents!!</p>
 </div>
 
 <br><br>
