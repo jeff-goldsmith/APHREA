@@ -388,7 +388,7 @@ graphics and web-like applications. There are several ways to use
 conjunction with <code>flexdashboard</code> to make interactive
 dashboards within R Markdown.</p>
 <p>This page builds on content in <a
-href="dashboards.html">dashboards</a>.</p>
+href="shortcourse_dashboards.html">dashboards</a>.</p>
 <div id="slide-deck" class="section level2">
 <h2>Slide Deck</h2>
 <div class="vid_container">
@@ -465,10 +465,11 @@ hold our input widgets.</p>
 much else.</p>
 <pre class="r"><code>library(tidyverse)
 library(p8105.datasets)</code></pre>
-<p>As in <a href="dashboards.html">dashboards</a>, we’re going to focus
-on the <a href="dataset_airbnb.html">Airbnb</a> data. Our goal is to
-make a dashboard similar to the one produced there, but with interactive
-elements in place of hard-coded data manipulation choices.</p>
+<p>As in <a href="shortcourse_dashboards.html">dashboards</a>, we’re
+going to focus on the <a href="data.html">Airbnb</a> data. Our goal is
+to make a dashboard similar to the one produced there, but with
+interactive elements in place of hard-coded data manipulation
+choices.</p>
 <div id="data-import" class="section level3">
 <h3>Data import</h3>
 <p>The code below loads and cleans the data, and selects only a few of
@@ -551,10 +552,11 @@ gallery</a>.</p>
 </div>
 <div id="reactive-plots" class="section level3">
 <h3>Reactive plots</h3>
-<p>In <a href="dashboards.html">dashboards</a>, we made plots showing
-rental locations, number of rentals in each neighborhood, and the price
-range of rentals in some neighborhoods. We’re going to make similar
-plots now, but we want these to update based on user inputs.</p>
+<p>In <a href="shortcourse_dashboards.html">dashboards</a>, we made
+plots showing rental locations, number of rentals in each neighborhood,
+and the price range of rentals in some neighborhoods. We’re going to
+make similar plots now, but we want these to update based on user
+inputs.</p>
 <p>We’ll start with the <code>plot_ly</code> scatterplot showing rental
 location and prices. As a first step, replace the
 <code>renderText</code> code in your dashboard with the

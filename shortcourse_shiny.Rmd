@@ -8,7 +8,7 @@ output:
 
 `Shiny` is RStudio's framework for creating interactive graphics and web-like applications. There are several ways to use `Shiny`, and we're going to focus on how to use it in conjunction with `flexdashboard` to make interactive dashboards within R Markdown.
 
-This page builds on content in [dashboards](dashboards.html).
+This page builds on content in [dashboards](shortcourse_dashboards.html).
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -52,7 +52,7 @@ library(tidyverse)
 library(p8105.datasets)
 ```
 
-As in [dashboards](dashboards.html), we're going to focus on the [Airbnb](dataset_airbnb.html) data. Our goal is to make a dashboard similar to the one produced there, but with interactive elements in place of hard-coded data manipulation choices. 
+As in [dashboards](shortcourse_dashboards.html), we're going to focus on the [Airbnb](data.html) data. Our goal is to make a dashboard similar to the one produced there, but with interactive elements in place of hard-coded data manipulation choices. 
 
 ### Data import
 
@@ -130,7 +130,7 @@ For other types of widgets (and there are lots!) check out the [widget gallery](
 
 ### Reactive plots
 
-In [dashboards](dashboards.html), we made plots showing rental locations, number of rentals in each neighborhood, and the price range of rentals in some neighborhoods. We're going to make similar plots now, but we want these to update based on user inputs. 
+In [dashboards](shortcourse_dashboards.html), we made plots showing rental locations, number of rentals in each neighborhood, and the price range of rentals in some neighborhoods. We're going to make similar plots now, but we want these to update based on user inputs. 
 
 We'll start with the `plot_ly` scatterplot showing rental location and prices. As a first step, replace the `renderText` code in your dashboard with the `renderPlotly` code below.
 
